@@ -1,0 +1,28 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "inquirer": "^7.1.0",
+    "mysql": "^2.18.1",
+    "util": "^0.12.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodriguezh21/Employee-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rodriguezh21/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/rodriguezh21/Employee-Tracker#readme"
+}
