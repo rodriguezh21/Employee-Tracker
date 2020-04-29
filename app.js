@@ -30,7 +30,8 @@ function questions() {
             "View Employees",
             "View Departments",
             "View Roles",
-            "Update Employee Manager"
+            "Update Employee Manager",
+            "Delete Employee"
         ]
     }).then(answers => {
         switch (answers.choice) {
@@ -55,6 +56,9 @@ function questions() {
                 break;
             case "Update Employee Manager":
                 updateEmployee()
+                break;
+            case "Delete Employee":
+                deleteEmployee()
                 break;
 
         }
@@ -162,9 +166,9 @@ function viewRoles() {
         questions();
     })
 }
+
+
 // Chris and Nick helped me with this solution
-
-
 
 
 // updating employees
@@ -185,7 +189,7 @@ async function updateEmployee() {
                 choices: employeeChoices
             }
         )
-        console.log('employeeId', employeeId)
+    
     const managers = await connection.query("SELECT id, first_name, last_name FROM employee WHERE role_id=5")
     const managerChoices = managers.map(manager => ({
         name: `${manager.first_name} ${manager.last_name}`,
@@ -201,10 +205,34 @@ async function updateEmployee() {
                 choices: managerChoices
             }
         )
-        console.log('managerId', managerId)
+    console.log('managerId', managerId)
     await connection.query("UPDATE employee SET manager_id=? WHERE id=?", [managerId.eName, employeeId.eName])
+    console.log("You have successfully updated employee")
     questions();
 
 }
+
+// deleting employess
+
+async function deleteEmployee() {
+    const delEmp = await connection.query("SELECT id, first_name, last_name FROM employee")
+    const employeeChoices = delEmp.map(employee => ({
+        name: `${employee.first_name} ${employee.last_name}`,
+        value: employee.id
+    }))
+
+    const employeeId = await
+        inquirer.prompt(
+            {
+                type: "list",
+                name: "eName",
+                message: "Select employee you want to delete:",
+                choices: employeeChoices
+            })
+
+            await connection.query("DELETE from employee where id=?",[employeeId.eName]);
+            console.log("You have successfully deleted an employee")
+            viewEmployees();
+        }
 
 
