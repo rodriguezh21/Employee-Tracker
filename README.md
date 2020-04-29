@@ -46,6 +46,6 @@ Console.Table Module
 ***
 CREDITS
 
-Mansi Patel - Senior Tutor
-Chris McLaughlin
-Nick Elliott
+- Mansi Patel - Senior Tutor
+- Chris McLaughlin
+- Nick Elliott
