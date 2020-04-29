@@ -1,24 +1,9 @@
-const mysql = require("mysql");
 const inquirer = require("inquirer");
-const util = require("util");
 
-
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "password",
-    database: "emp_trackerDB"
-});
-connection.query = util.promisify(connection.query)
-
-connection.connect(function (err) {
-    if (err) throw err;
-    console.log("connected as id " + connection.threadId);
-    questions()
-});
+var connection = require("./connection/connection.js");
 
 function questions() {
+
     inquirer.prompt({
         message: "What would you like to do?",
         type: "list",
@@ -31,7 +16,9 @@ function questions() {
             "View Departments",
             "View Roles",
             "Update Employee Manager",
-            "Delete Employee"
+            "Delete Employee",
+            "Delete Department",
+            "Delete Role"
         ]
     }).then(answers => {
         switch (answers.choice) {
@@ -59,6 +46,12 @@ function questions() {
                 break;
             case "Delete Employee":
                 deleteEmployee()
+                break;
+            case "Delete Department":
+                deleteDepartment()
+                break;
+            case "Delete Role":
+                deleteRole()
                 break;
 
         }
@@ -96,13 +89,16 @@ function questions() {
                 var roleID = res.roleId.split(" ");
                 connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [res.firstName, res.lastName, roleID[0], res.managerId], function (err, data) {
                     if (err) throw err;
-                    console.table("Success!");
-                    questions();
+                    console.table("You have successfully added an employee!");
+                    
                 })
             })
         }
     })
 }
+
+questions();
+
 function viewDepartment() {
     connection.query("SELECT * FROM department", function (err, data) {
         if (err) throw err;
@@ -128,7 +124,7 @@ function addDepartment() {
     ]).then(function (res) {
         connection.query("INSERT INTO department (name) VALUES (?)", [res.department], function (err, data) {
             if (err) throw err;
-            console.table("Success!");
+            console.table("You have successfully added a department!");
             questions();
         })
     })
@@ -154,7 +150,7 @@ function addRole() {
     ]).then(function (res) {
         connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [res.title, res.salary, res.departmentId], function (err, data) {
             if (err) throw err;
-            console.table("Success!");
+            console.table("You have successfully added a role!");
             questions();
         })
     })
@@ -185,7 +181,7 @@ async function updateEmployee() {
             {
                 type: "list",
                 name: "eName",
-                message: "Select employee you want to update manager for:",
+                message: "Select employee you want to update:",
                 choices: employeeChoices
             }
         )
@@ -207,7 +203,7 @@ async function updateEmployee() {
         )
     console.log('managerId', managerId)
     await connection.query("UPDATE employee SET manager_id=? WHERE id=?", [managerId.eName, employeeId.eName])
-    console.log("You have successfully updated employee")
+    console.log("You have successfully updated employee!")
     questions();
 
 }
@@ -226,13 +222,60 @@ async function deleteEmployee() {
             {
                 type: "list",
                 name: "eName",
-                message: "Select employee you want to delete:",
+                message: "Select the employee you want to delete:",
                 choices: employeeChoices
             })
 
             await connection.query("DELETE from employee where id=?",[employeeId.eName]);
-            console.log("You have successfully deleted an employee")
+            console.log("You have successfully deleted an employee!")
             viewEmployees();
+        }
+
+// deleting departments
+
+async function deleteDepartment() {
+    const delDept = await connection.query("SELECT * FROM department")
+    const departmentChoices = delDept.map(dept => ({
+        name: `${dept.name}`,
+        value: dept.id
+    }))
+
+    const departmentId = await
+        inquirer.prompt(
+            {
+                type: "list",
+                name: "eName",
+                message: "Select the department you want to delete:",
+                choices: departmentChoices
+            })
+
+            await connection.query("DELETE from department where id=?",[departmentId.eName]);
+            console.log("You have successfully deleted a department!")
+            viewDepartment();
+        }
+
+//  deleting roles
+
+async function deleteRole() {
+    const delRole = await connection.query("SELECT * FROM role")
+    const roleChoices = delRole.map(roles => ({
+        name: `${roles.title}`,
+        value: roles.id
+    }))
+    // console.log('role.id', role.id)
+
+    const roleId = await
+        inquirer.prompt(
+            {
+                type: "list",
+                name: "eName",
+                message: "Select the role you want to delete:",
+                choices: roleChoices
+            })
+
+            await connection.query("DELETE from role where id=?",[roleId.eName]);
+            console.log("You have successfully deleted a role!")
+            viewRoles();
         }
 
 
