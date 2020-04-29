@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
+const connection = require("./connection/connection.js");
 
-var connection = require("./connection/connection.js");
 
 function questions() {
 
@@ -55,6 +55,7 @@ function questions() {
                 break;
 
         }
+
         function addEmployee() {
             inquirer.prompt([
 
@@ -90,7 +91,8 @@ function questions() {
                 connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [res.firstName, res.lastName, roleID[0], res.managerId], function (err, data) {
                     if (err) throw err;
                     console.table("You have successfully added an employee!");
-                    
+                    questions();
+
                 })
             })
         }
@@ -185,7 +187,7 @@ async function updateEmployee() {
                 choices: employeeChoices
             }
         )
-    
+
     const managers = await connection.query("SELECT id, first_name, last_name FROM employee WHERE role_id=5")
     const managerChoices = managers.map(manager => ({
         name: `${manager.first_name} ${manager.last_name}`,
@@ -226,10 +228,10 @@ async function deleteEmployee() {
                 choices: employeeChoices
             })
 
-            await connection.query("DELETE from employee where id=?",[employeeId.eName]);
-            console.log("You have successfully deleted an employee!")
-            viewEmployees();
-        }
+    await connection.query("DELETE from employee where id=?", [employeeId.eName]);
+    console.log("You have successfully deleted an employee!")
+    viewEmployees();
+}
 
 // deleting departments
 
@@ -249,10 +251,10 @@ async function deleteDepartment() {
                 choices: departmentChoices
             })
 
-            await connection.query("DELETE from department where id=?",[departmentId.eName]);
-            console.log("You have successfully deleted a department!")
-            viewDepartment();
-        }
+    await connection.query("DELETE from department where id=?", [departmentId.eName]);
+    console.log("You have successfully deleted a department!")
+    viewDepartment();
+}
 
 //  deleting roles
 
@@ -273,9 +275,9 @@ async function deleteRole() {
                 choices: roleChoices
             })
 
-            await connection.query("DELETE from role where id=?",[roleId.eName]);
-            console.log("You have successfully deleted a role!")
-            viewRoles();
-        }
+    await connection.query("DELETE from role where id=?", [roleId.eName]);
+    console.log("You have successfully deleted a role!")
+    viewRoles();
+}
 
 
