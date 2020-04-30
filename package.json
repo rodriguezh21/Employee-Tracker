@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "figlet": "^1.4.0",
     "inquirer": "^7.1.0",
     "mysql": "^2.18.1",
     "util": "^0.12.2"
