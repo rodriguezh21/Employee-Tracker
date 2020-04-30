@@ -1,6 +1,13 @@
 const inquirer = require("inquirer");
 const connection = require("./connection/connection.js");
+const figlet = require("figlet");
 
+// Intro using figlet
+console.log(figlet.textSync('Employee Tracker', {
+    font: 'Standard',
+    horizontalLayout: 'default',
+    verticalLayout: 'default'
+}));
 
 function questions() {
 
