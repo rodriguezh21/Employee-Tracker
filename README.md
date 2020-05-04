@@ -34,6 +34,11 @@ Build a command-line application that at a minimum allows the user to:
   
 ***
 
+HOW IT WORKS
+
+<a href="https://imgflip.com/gif/401ho1"><img src="https://i.imgflip.com/401ho1.gif"></a>
+
+***
 TECHNOLOGIES USED
 
 <img alt="MySQL" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/62/MySQL.svg/1200px-MySQL.svg.png" width="28" height="30"> MySQL https://www.mysql.com/
